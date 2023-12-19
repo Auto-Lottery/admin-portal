@@ -1,0 +1,32 @@
+.wrapper {
+  display: flex;
+}
+
+.bg {
+  flex: 1;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: left;
+  background-repeat: no-repeat;
+  background-image: url("/assets/bg.jpg");
+}
+.form {
+  border-right: rem(1px) solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+  min-height: 100vh;
+  min-width: rem(400px);
+  padding-top: rem(80px);
+  border-right: rem(1px) solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    max-width: 100%;
+  }
+}
+
+.title {
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  font-family:
+    Greycliff CF,
+    var(--mantine-font-family);
+}

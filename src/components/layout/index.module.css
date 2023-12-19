@@ -1,0 +1,21 @@
+.layoutContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.bodyContainer {
+  height: 100vh;
+  flex: 1;
+}
+
+.headerSection {
+  height: 59.09px;
+  padding: var(--mantine-spacing-md);
+  border-bottom: rem(1px) solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.contentSection {
+  height: calc(100vh - 59.09px);
+  overflow: auto;
+}
