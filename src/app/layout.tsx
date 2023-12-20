@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { theme } from "@/config/theme";
 import { Providers } from './providers';
+import { getLoggedUserCookie } from '@/services/auth-service';
 
 // import { Inter } from "next/font/google";
 // const inter = Inter({ subsets: ["latin"] });
@@ -18,6 +19,9 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+
+    let loggedUserData = getLoggedUserCookie();
+
     return (
         <html lang="en">
             <head>
@@ -30,7 +34,7 @@ export default function RootLayout({
             </head>
             <body>
                 <MantineProvider theme={theme} defaultColorScheme="auto">
-                    <Providers>
+                    <Providers loggedUserData={loggedUserData}>
                         {children}
                     </Providers>
                 </MantineProvider>

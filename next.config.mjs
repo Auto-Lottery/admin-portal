@@ -3,7 +3,7 @@ import bundleAnalyzer from "@next/bundle-analyzer";
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
-console.log(process.env.AUTH_API_URL);
+
 export default withBundleAnalyzer({
   reactStrictMode: false,
   eslint: {
@@ -17,6 +17,10 @@ export default withBundleAnalyzer({
       {
         source: "/backend/:slug*",
         destination: `${process.env.AUTH_API_URL}/:slug*`, // Proxy to Backend
+      },
+      {
+        source: "/generator/:slug*",
+        destination: `${process.env.GENERATOR_API_URL}/:slug*`, // Proxy to Backend
       },
     ];
   },

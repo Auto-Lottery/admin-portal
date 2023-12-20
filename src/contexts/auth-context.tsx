@@ -2,24 +2,12 @@
 
 import React, { ReactNode, createContext, useState, useEffect, useContext, useCallback } from "react";
 import { useClientRequest } from "./client-request-context";
-import { redirect, usePathname } from "next/navigation";
-
-interface User {
-    _id: string;
-    phoneNumber: string;
-    operator: string;
-    role: [string];
-}
-
-interface TokenData {
-    token: string;
-    exp?: number;
-}
-
+import { redirect, usePathname, useRouter } from "next/navigation";
+import { AdminUser, AdminUserWithToken } from "@/types/user";
 interface AuthContextType {
     login: (values?: any) => Promise<void>;
     logout: () => void;
-    user: User | null | undefined;
+    user: AdminUser | null | undefined;
     token?: string;
     isLogged: boolean;
 }
@@ -39,60 +27,63 @@ export const useAuth = () => {
 const UNAUTHENTICATED_PATHS = ["/login", "/register"];
 const PUBLIC_PATHS = UNAUTHENTICATED_PATHS.concat(['/test']);
 
-function AuthProvider({ children }: { children: ReactNode }) {
+function AuthProvider({ children, loggedUserData }: { children: ReactNode, loggedUserData: AdminUserWithToken | null }) {
     const { getRequest } = useClientRequest();
-    const [user, setUser] = useState<User | null | undefined>();
-    const [tokenData, setTokenData] = useState<TokenData>();
+    const [user, setUser] = useState<AdminUser | null | undefined>();
     const [isLogged, setIsLogged] = useState<boolean>(false);
+    const [token, setToken] = useState<string>();
     const [loading, setLoading] = useState<boolean>(true);
     const pathname = usePathname();
 
+    const checkTokenExpire = useCallback((loggedUserData: AdminUserWithToken) => {
+        const { exp, token, ...userData } = loggedUserData;
+        if (exp && Date.now() < exp * 1000 && token) {
+            localStorage.setItem("token", token);
+            setUser(userData);
+            setToken(token);
+            setIsLogged(true);
+            setLoading(false);
+            return;
+        } else {
+            logout();
+        }
+    }, []);
+
     const checkAuth = useCallback(
-        async (loggedDataStr: string) => {
-            try {
-                const { exp, token, ...userData } = JSON.parse(loggedDataStr) as (TokenData & User);
-                if (exp && Date.now() < exp * 1000 && token) {
-                    setUser(userData);
-                    setIsLogged(true);
-                    setLoading(false);
-                    setTokenData({
-                        exp,
-                        token
-                    });
-                    return;
-                }
+        async () => {
+            const res = await getRequest('/api/checkAuth');
+            if (res === null) {
                 logout();
-            } catch (err) {
-                logout();
+                return;
             }
+            const lud = res as AdminUserWithToken;
+            checkTokenExpire(lud);
         },
         [getRequest]
     );
 
     useEffect(() => {
-        const loggedDataStr = localStorage.getItem("loggedData");
-
-        if (loggedDataStr) {
-            checkAuth(loggedDataStr);
+        if (loggedUserData) {
+            checkTokenExpire(loggedUserData);
         } else {
-            logout();
-            setLoading(false);
+            checkAuth();
         }
         return () => { };
-    }, [checkAuth]);
+    }, [checkAuth, checkTokenExpire, loggedUserData]);
 
     const login = async (res: any) => {
-        const loggedDataStr = JSON.stringify(res);
-        localStorage.setItem("loggedData", loggedDataStr);
-        checkAuth(loggedDataStr);
+        checkAuth();
     };
 
-    const logout = useCallback(() => {
+    const logout = useCallback(async () => {
+        await getRequest("/api/logout");
         setIsLogged(false);
         setLoading(false);
-        setTokenData(undefined);
         setUser(undefined);
-        localStorage.clear();
+        localStorage.removeItem("token");
+        if (!PUBLIC_PATHS.includes(pathname) && !UNAUTHENTICATED_PATHS.includes(pathname)) {
+            window.location.replace("/login")
+        }
     }, []);
 
     if (loading) {
@@ -111,8 +102,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
         <AuthContext.Provider
             value={{
                 isLogged,
-                token: tokenData?.token,
                 user,
+                token,
                 login,
                 logout,
             }}

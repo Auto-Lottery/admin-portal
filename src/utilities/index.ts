@@ -1,17 +1,26 @@
-// import CryptoJS from "crypto-js";
+import crypto from "crypto";
 
-// const dataEncrypt = (plaintext) => {
-//   const encryptedData = CryptoJS.AES.encrypt(
-//     plaintext,
-//     DATA_ENCRYPT_SECRET
-//   ).toString();
-//   return encryptedData;
-// };
+export const encryptData = (plaintext: string, isClient: boolean = false) => {
+  const secretKey =
+    (isClient ? process.env.DATA_SECRET : global.process.env.DATA_SECRET) || "";
+  const cipher = crypto.createCipher("aes-256-ctr", secretKey);
+  const encrypted = Buffer.concat([
+    cipher.update(plaintext, "utf-8"),
+    cipher.final(),
+  ]);
+  return encrypted.toString("hex");
+};
 
-// const dataDecrypt = (encryptedData) => {
-//   const decryptedData = CryptoJS.AES.decrypt(
-//     encryptedData,
-//     DATA_ENCRYPT_SECRET
-//   ).toString(CryptoJS.enc.Utf8);
-//   return decryptedData;
-// };
+export const dataDecrypt = (
+  encryptedData: string,
+  isClient: boolean = false
+) => {
+  const secretKey =
+    (isClient ? process.env.DATA_SECRET : global.process.env.DATA_SECRET) || "";
+  const decipher = crypto.createDecipher("aes-256-ctr", secretKey);
+  const decrypted = Buffer.concat([
+    decipher.update(Buffer.from(encryptedData, "hex")),
+    decipher.final(),
+  ]);
+  return decrypted.toString("utf-8");
+};

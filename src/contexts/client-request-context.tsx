@@ -2,6 +2,7 @@
 
 import { clientRequest } from "@/config";
 import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
 import React, { ReactNode, createContext, useContext } from "react";
 import { TbAlertCircle, TbAlertSmall } from "react-icons/tb";
 
@@ -40,6 +41,11 @@ function ClientRequestProvider({ children }: { children: ReactNode }) {
       });
       return null;
     } catch (err: any) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          // window.location.reload();
+        }
+      }
       notifications.show({
         title: err.response?.statusText || "Алдаа",
         color: "red",
@@ -52,8 +58,6 @@ function ClientRequestProvider({ children }: { children: ReactNode }) {
   };
 
   const postRequest = (url: string, data: any, config?: any): any => {
-
-    console.log("eeee ", url, data);
     return responseChecker(clientRequest.post(url, data, config));
   };
 

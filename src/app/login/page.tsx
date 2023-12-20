@@ -55,7 +55,7 @@ const LoginPage = () => {
         phoneNumber: string,
         password: string
     }) => {
-        const res = await postRequest("/backend/admin/login", values);
+        const res = await postRequest("/api/login", values);
         login(res);
     }
 
