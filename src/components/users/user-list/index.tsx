@@ -1,12 +1,33 @@
 "use client";
-import React from 'react'
-import { Badge, Table } from '@mantine/core'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Badge } from '@mantine/core'
 import dayjs from 'dayjs'
 import { User } from '@/types/user';
+import { useClientRequest } from '@/contexts/client-request-context';
+import { PaginationOption } from '@/types/pagination';
+import CustomTable, { RowItemType } from '@/components/shared/table';
+import { TableColumnConfig } from '@/types/table';
 
-const UserList = ({ data = [] }: {
-    data: User[]
-}) => {
+const UserList = () => {
+
+    const [userList, setUserList] = useState<User[]>([]);
+    const { getRequest } = useClientRequest();
+    const [totalRow, setTotalRow] = useState(0);
+    const [pagination, setPagination] = useState<PaginationOption>({
+        page: 1,
+        pageSize: 10,
+        total: 0
+    })
+
+    const getUserList = useCallback(async (page: number, pageSize: number) => {
+        const res = await getRequest(`/backend/admin/users?page=${page}&pageSize=${pageSize}`);
+        setUserList(res.userList);
+        setTotalRow(res.total);
+    }, [getRequest]);
+
+    useEffect(() => {
+        getUserList(pagination.page, pagination.pageSize)
+    }, [getUserList, pagination]);
 
     const renderOperator = (user: User) => {
         if (user.operator === "MOBICOM") {
@@ -37,27 +58,32 @@ const UserList = ({ data = [] }: {
         return null
     }
 
-    const rows = data.map((user) => (
-        <Table.Tr key={user._id}>
-            <Table.Td>{user._id}</Table.Td>
-            <Table.Td>{user.phoneNumber}</Table.Td>
-            <Table.Td>{renderOperator(user)}</Table.Td>
-            <Table.Td>{dayjs(user.createdDate).format("YYYY-MM-DD HH:mm:ss")}</Table.Td>
-        </Table.Tr>
-    ));
+    const columnConfig: TableColumnConfig[] = [
+        {
+            label: "Хэрэглэгчийн Д/Д",
+            renderCell: (rowData: RowItemType) => {
+                return rowData?._id
+            },
+        }, {
+            label: "Утасны дугаар",
+            renderCell: (rowData: RowItemType) => {
+                return rowData?.phoneNumber;
+            },
+        }, {
+            label: "Оператор",
+            renderCell: (rowData: RowItemType) => {
+                return renderOperator(rowData as User)
+            },
+        }, {
+            label: "Бүртгүүлсэн огноо",
+            renderCell: (rowData: RowItemType) => {
+                return dayjs(rowData?.createdDate).format("YYYY-MM-DD HH:mm:ss")
+            },
+        }
+    ];
+
     return (
-        <Table stickyHeader stickyHeaderOffset={-1} withTableBorder>
-            <Table.Thead>
-                <Table.Tr>
-                    <Table.Th>Хэрэглэгчийн Д/Д</Table.Th>
-                    <Table.Th>Утасны дугаар</Table.Th>
-                    <Table.Th>Оператор</Table.Th>
-                    <Table.Th>Бүртгүүлсэн огноо</Table.Th>
-                </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-            {/* <Table.Caption>Scroll page to see sticky thead</Table.Caption> */}
-        </Table>
+        <CustomTable data={userList} columnConfig={columnConfig} rowKeyField='_id' pagination={{ ...pagination, total: totalRow }} setPagination={setPagination} highlightOnHover={true} />
     )
 }
 
