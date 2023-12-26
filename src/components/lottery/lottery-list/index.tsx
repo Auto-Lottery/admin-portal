@@ -10,7 +10,7 @@ import { useClientRequest } from '@/contexts/client-request-context';
 const LotteryList = () => {
 
     const [orderedLotteryList, setOrderedLotteryList] = useState<OrderedLottery[]>([]);
-    const { getRequest } = useClientRequest();
+    const { postRequest } = useClientRequest();
     const [totalRow, setTotalRow] = useState(0);
     const [pagination, setPagination] = useState<PaginationOption>({
         page: 1,
@@ -19,10 +19,15 @@ const LotteryList = () => {
     })
 
     const getLotteryList = useCallback(async (page: number, pageSize: number) => {
-        const res = await getRequest(`/generator/lottery/list?page=${page}&pageSize=${pageSize}`);
+        const res = await postRequest(`/generator/lottery/list`, {
+            pagination: {
+                page,
+                pageSize
+            }
+        });
         setOrderedLotteryList(res.lotteryList);
         setTotalRow(res.total);
-    }, [getRequest]);
+    }, [postRequest]);
 
     useEffect(() => {
         getLotteryList(pagination.page, pagination.pageSize)

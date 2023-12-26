@@ -1,6 +1,6 @@
 import { PaginationOption } from '@/types/pagination';
 import { TableColumnConfig } from '@/types/table';
-import { Code, Group, Pagination, Table } from '@mantine/core'
+import { Code, Group, Pagination, Table, Text } from '@mantine/core'
 import React, { useState } from 'react'
 
 export type RowItemType = Record<string, any> | undefined;
@@ -10,6 +10,7 @@ const CustomTable = ({
     rowKeyField,
     pagination,
     highlightOnHover = false,
+    onSelectRow = () => { },
     setPagination
 }: {
     data: Array<RowItemType>,
@@ -17,14 +18,18 @@ const CustomTable = ({
     columnConfig: TableColumnConfig[],
     pagination: PaginationOption,
     highlightOnHover?: boolean,
+    onSelectRow?: (rowData: RowItemType) => void,
     setPagination: React.Dispatch<React.SetStateAction<PaginationOption>>
 }) => {
-    const [selectedRow, setSelectedRow] = useState<RowItemType>();
-
+    // const [selectedRow, setSelectedRow] = useState<RowItemType>();
+    const totalPage = (pagination.total / pagination.pageSize) + ((pagination.total % pagination.pageSize) > 0 ? 1 : 0);
+    const currentMaxRow = pagination.page * pagination.pageSize;
+    const currentRow = currentMaxRow > pagination.total ? pagination.total : currentMaxRow;
     const handleSelectRow = (rowData: RowItemType) => {
-        if (rowData !== selectedRow) {
-            setSelectedRow(rowData);
-        }
+        onSelectRow(rowData);
+        // if (rowData !== selectedRow) {
+        //     setSelectedRow(rowData);
+        // }
     }
 
     const changePage = (page: number) => {
@@ -78,14 +83,31 @@ const CustomTable = ({
                 <Table.Tbody>{rows}</Table.Tbody>
                 {/* <Table.Caption>Scroll page to see sticky thead</Table.Caption> */}
             </Table>
-            <Group mt="md" justify='center'>
+            <Group mt="md" justify='space-between'>
+                <div></div>
                 <Pagination
-                    total={(pagination.total / pagination.pageSize) + ((pagination.total % pagination.pageSize) > 0 ? 1 : 0)}
+                    total={totalPage}
                     boundaries={3}
                     siblings={3}
-                    onChange={changePage}
-                    onNextPage={() => changePage(pagination.page + 1)}
-                    onPreviousPage={() => changePage(pagination.page + 1)} />
+                    onChange={(page) => {
+                        if (page !== pagination.page) {
+                            changePage(page);
+                        }
+                    }}
+                    onNextPage={() => {
+                        const nextPage = pagination.page + 1
+                        if (totalPage >= nextPage) {
+                            console.log("qork")
+                            changePage(nextPage)
+                        }
+                    }}
+                    onPreviousPage={() => {
+                        const prevPage = pagination.page - 1;
+                        if (prevPage > 0) {
+                            changePage(prevPage)
+                        }
+                    }} />
+                <Text size="md" fw="bold">Нийт: {pagination.total}-с {currentRow} мөр</Text>
             </Group>
         </>
     )

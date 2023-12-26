@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useEffect, useState } from 'react'
-import { Badge } from '@mantine/core'
 import dayjs from 'dayjs'
 import { User } from '@/types/user';
 import { useClientRequest } from '@/contexts/client-request-context';
@@ -9,9 +8,9 @@ import CustomTable, { RowItemType } from '@/components/shared/table';
 import { TableColumnConfig } from '@/types/table';
 import { useRouter } from 'next/navigation';
 
-const UserList = () => {
+const UserLotteryList = ({ userId }: { userId: string }) => {
 
-    const [userList, setUserList] = useState<User[]>([]);
+    const [userLotteryList, setUserLotteryList] = useState<User[]>([]);
     const { postRequest } = useClientRequest();
     const router = useRouter();
     const [totalRow, setTotalRow] = useState(0);
@@ -22,13 +21,19 @@ const UserList = () => {
     })
 
     const getUserList = useCallback(async (page: number, pageSize: number) => {
-        const res = await postRequest(`/backend/admin/users`, {
+        const res = await postRequest(`/generator/lottery/userLotteryList`, {
+            "conditions": [{
+                "operator": "=",
+                "value": userId,
+                "valueType": "string",
+                "field": "userId"
+            }],
             "pagination": {
                 "page": page,
                 "pageSize": pageSize
             }
         });
-        setUserList(res.userList);
+        setUserLotteryList(res.userLotteryList);
         setTotalRow(res.total);
     }, [postRequest]);
 
@@ -36,48 +41,24 @@ const UserList = () => {
         getUserList(pagination.page, pagination.pageSize)
     }, [getUserList, pagination]);
 
-    const renderOperator = (user: User) => {
-        if (user.operator === "MOBICOM") {
-            return <Badge color="red" style={{
-                textTransform: "none"
-            }}>Mobicom</Badge>;
-        }
-        if (user.operator === "UNITEL") {
-            return <Badge color="green" style={{
-                textTransform: "none"
-            }}>Unitel</Badge>;
-        }
-        if (user.operator === "GMOBILE") {
-            return <Badge color="#fdb913" style={{
-                color: "black",
-                textTransform: "none"
-            }}>G-Mobile</Badge>;
-        }
-        if (user.operator === "SKYTEL") {
-            return <Badge color="white" style={{
-                color: "#00359B",
-                textTransform: "none"
-            }}>SKYtel</Badge>;
-        }
-        if (user.operator === "ONDO") {
-            return <Badge color="#ff0099">ONDO</Badge>;
-        }
-        return null
-    }
-
     const columnConfig: TableColumnConfig[] = [
         {
-            label: "Утасны дугаар",
+            label: "Cерийн дугаар",
             renderCell: (rowData: RowItemType) => {
-                return rowData?.phoneNumber;
+                return rowData?.seriesNumberStr;
             },
         }, {
-            label: "Оператор",
+            label: "Тохиролын дугаар",
             renderCell: (rowData: RowItemType) => {
-                return renderOperator(rowData as User)
+                return rowData?.tohirol?.tohirolNumber
             },
         }, {
-            label: "Бүртгүүлсэн огноо",
+            label: "Гүйлгээний дугаар",
+            renderCell: (rowData: RowItemType) => {
+                return rowData?.transactionId
+            },
+        }, {
+            label: "Үүссэн огноо",
             renderCell: (rowData: RowItemType) => {
                 return dayjs(rowData?.createdDate).format("YYYY-MM-DD HH:mm:ss")
             },
@@ -86,16 +67,16 @@ const UserList = () => {
 
     return (
         <CustomTable
-            data={userList}
+            data={userLotteryList}
             columnConfig={columnConfig}
             rowKeyField='_id'
             pagination={{ ...pagination, total: totalRow }}
             setPagination={setPagination}
-            onSelectRow={(rowData: RowItemType) => {
-                router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
-            }}
+            // onSelectRow={(rowData: RowItemType) => {
+            //     router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
+            // }}
             highlightOnHover={true} />
     )
 }
 
-export default UserList
+export default UserLotteryList

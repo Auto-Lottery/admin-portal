@@ -41,7 +41,7 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
     ];
 
     const activeMenu = useMemo(() => {
-        const selectedMenuItem = mockdata.find(menuItem => menuItem.href === pathname);
+        const selectedMenuItem = mockdata.find(menuItem => menuItem.key === "dashboard" ? pathname === menuItem.href : pathname.startsWith(menuItem.href));
 
         if (selectedMenuItem) {
             return selectedMenuItem;
