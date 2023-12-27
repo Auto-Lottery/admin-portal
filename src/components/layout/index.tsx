@@ -8,6 +8,8 @@ import {
     TbGauge,
     TbUsers,
     TbGift,
+    TbArrowsLeftRight,
+    TbMessage,
 } from "react-icons/tb";
 import { GrUserAdmin } from "react-icons/gr";
 
@@ -36,6 +38,16 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
             key: "lottery",
             label: "Сугалаа", href: "/lottery",
             icon: TbGift
+        },
+        {
+            key: "transactions",
+            label: "Гүйлгээ", href: "/transactions",
+            icon: TbArrowsLeftRight
+        },
+        {
+            key: "message",
+            label: "Мессеж", href: "/message",
+            icon: TbMessage
         },
         { key: "admin_users", label: "Админ хэрэглэгч", href: "/admin-users", icon: GrUserAdmin },
     ];

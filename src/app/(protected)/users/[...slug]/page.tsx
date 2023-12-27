@@ -1,5 +1,6 @@
 "use client"
 import UserLotteryList from '@/components/users/user-lottery-list'
+import UserTransactionList from '@/components/users/user-transaction-list'
 import { Box, Group, Tabs, Text } from '@mantine/core'
 import React from 'react'
 
@@ -27,10 +28,10 @@ const UserDetail = ({ params }: { params: { slug: string[] } }) => {
                     <UserLotteryList userId={params.slug[0]} />
                 </Tabs.Panel>
                 <Tabs.Panel value="transaction" pt={"md"}>
-                    lkjdslf
-                    {/* <UnstyledButton className={{}}>
-
-                    </UnstyledButton> */}
+                    <UserTransactionList userData={{
+                        userId: params.slug[0],
+                        phoneNumber: params.slug[1]
+                    }} />
                 </Tabs.Panel>
             </Tabs>
         </Box>

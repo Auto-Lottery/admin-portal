@@ -22,7 +22,7 @@ const UserList = () => {
     })
 
     const getUserList = useCallback(async (page: number, pageSize: number) => {
-        const res = await postRequest(`/backend/admin/users`, {
+        const res = await postRequest(`/auth/admin/users`, {
             "pagination": {
                 "page": page,
                 "pageSize": pageSize
@@ -66,6 +66,12 @@ const UserList = () => {
     }
 
     const columnConfig: TableColumnConfig[] = [
+        {
+            label: "#",
+            renderCell: (_, rowIndex) => {
+                return (pagination.page - 1) * pagination.pageSize + rowIndex + 1
+            },
+        },
         {
             label: "Утасны дугаар",
             renderCell: (rowData: RowItemType) => {

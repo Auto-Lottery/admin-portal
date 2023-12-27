@@ -15,12 +15,20 @@ export default withBundleAnalyzer({
   async rewrites() {
     return [
       {
-        source: "/backend/:slug*",
+        source: "/auth/:slug*",
         destination: `${process.env.AUTH_API_URL}/:slug*`, // Proxy to Backend
       },
       {
         source: "/generator/:slug*",
         destination: `${process.env.GENERATOR_API_URL}/:slug*`, // Proxy to Backend
+      },
+      {
+        source: "/transaction/:slug*",
+        destination: `${process.env.TRANSACTION_API_URL}/:slug*`, // Proxy to Backend
+      },
+      {
+        source: "/message/:slug*",
+        destination: `${process.env.MESSAGE_API_URL}/:slug*`, // Proxy to Backend
       },
     ];
   },

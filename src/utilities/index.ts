@@ -24,3 +24,21 @@ export const dataDecrypt = (
   ]);
   return decrypted.toString("utf-8");
 };
+
+export const moneyFormatter = (
+  numberValue: number,
+  minPrecision: number,
+  maxPrecision: number,
+) => {
+  if (typeof numberValue === "number" && !isNaN(numberValue)) {
+    return new Intl.NumberFormat("ja-JP", {
+      minimumFractionDigits: minPrecision,
+      maximumFractionDigits: maxPrecision,
+    }).format(numberValue);
+  } else {
+    return new Intl.NumberFormat("ja-JP", {
+      minimumFractionDigits: minPrecision,
+      maximumFractionDigits: maxPrecision,
+    }).format(0);
+  }
+};

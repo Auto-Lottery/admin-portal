@@ -35,9 +35,14 @@ const LotteryList = () => {
 
     const columnConfig: TableColumnConfig[] = [
         {
+            label: "#",
+            renderCell: (_, rowIndex) => {
+                return (pagination.page - 1) * pagination.pageSize + rowIndex + 1
+            },
+        }, {
             label: "Тохиролын дугаар",
             renderCell: (rowData: RowItemType) => {
-                return <div>{rowData?.tohirol?.tohirolNumber}</div>
+                return `${rowData?.tohirol?.tohirolNumber}-р тохирол`
             },
         }, {
             label: "Сугалааны дугаар",

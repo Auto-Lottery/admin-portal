@@ -6,13 +6,12 @@ import { useClientRequest } from '@/contexts/client-request-context';
 import { PaginationOption } from '@/types/pagination';
 import CustomTable, { RowItemType } from '@/components/shared/table';
 import { TableColumnConfig } from '@/types/table';
-import { useRouter } from 'next/navigation';
+import { Badge } from '@mantine/core';
 
 const UserLotteryList = ({ userId }: { userId: string }) => {
 
     const [userLotteryList, setUserLotteryList] = useState<User[]>([]);
     const { postRequest } = useClientRequest();
-    const router = useRouter();
     const [totalRow, setTotalRow] = useState(0);
     const [pagination, setPagination] = useState<PaginationOption>({
         page: 1,
@@ -43,19 +42,29 @@ const UserLotteryList = ({ userId }: { userId: string }) => {
 
     const columnConfig: TableColumnConfig[] = [
         {
+            label: "#",
+            renderCell: (_, rowIndex) => {
+                return (pagination.page - 1) * pagination.pageSize + rowIndex + 1
+            },
+        }, {
+            label: "Тохиролын дугаар",
+            renderCell: (rowData: RowItemType) => {
+                return `${rowData?.tohirol?.tohirolNumber}-р тохирол`
+            },
+        }, {
             label: "Cерийн дугаар",
             renderCell: (rowData: RowItemType) => {
                 return rowData?.seriesNumberStr;
             },
         }, {
-            label: "Тохиролын дугаар",
-            renderCell: (rowData: RowItemType) => {
-                return rowData?.tohirol?.tohirolNumber
-            },
-        }, {
-            label: "Гүйлгээний дугаар",
+            label: "Гүйлгээний ID",
             renderCell: (rowData: RowItemType) => {
                 return rowData?.transactionId
+            },
+        }, {
+            label: "Төлөв",
+            renderCell: (rowData: RowItemType) => {
+                return rowData?.tohirol?.isActive ? <Badge color='green'>Идэвхитэй</Badge> : <Badge color='grey'>Идэвхигүй</Badge>
             },
         }, {
             label: "Үүссэн огноо",
@@ -72,10 +81,10 @@ const UserLotteryList = ({ userId }: { userId: string }) => {
             rowKeyField='_id'
             pagination={{ ...pagination, total: totalRow }}
             setPagination={setPagination}
-            // onSelectRow={(rowData: RowItemType) => {
-            //     router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
-            // }}
-            highlightOnHover={true} />
+        // onSelectRow={(rowData: RowItemType) => {
+        //     router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
+        // }}
+        />
     )
 }
 

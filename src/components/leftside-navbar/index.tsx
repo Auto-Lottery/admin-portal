@@ -33,9 +33,9 @@ const LeftSideNavbar = ({
       <div className={classes.header}>
         <Group justify="space-between">
           <Title order={4} style={{ width: rem(140) }}>
-            Auto Wep App
+            Auto Prime
           </Title>
-          <Code fw={700}>v3.1.2</Code>
+          <Code fw={700}>v1.0</Code>
         </Group>
       </div>
 

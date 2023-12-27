@@ -41,7 +41,7 @@ const CustomTable = ({
         })
     }
 
-    const rows = data.map((rowData) => {
+    const rows = data.map((rowData, rowIndex) => {
         // const isOpenRow = selectedRow?.[rowKeyField] === rowData?.[rowKeyField];
         return (
             <React.Fragment key={rowData?.[rowKeyField]}>
@@ -53,7 +53,7 @@ const CustomTable = ({
                 >
                     {
                         columnConfig.map((config, index) => {
-                            return <Table.Td key={index}>{config?.renderCell(rowData)}</Table.Td>
+                            return <Table.Td key={index}>{config?.renderCell(rowData, rowIndex)}</Table.Td>
                         })
                     }
                 </Table.Tr>

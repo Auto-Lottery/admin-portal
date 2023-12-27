@@ -6,7 +6,7 @@ import { ssrRequests } from "@/config/serverSideClient";
 
 export async function POST(req: NextRequest) {
   const bodyData = await req.json();
-  const url = `${req.nextUrl.origin}/backend/admin/login`;
+  const url = `${req.nextUrl.origin}/auth/admin/login`;
   const res = (await ssrRequests.post(
     url,
     bodyData
