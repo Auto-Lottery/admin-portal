@@ -1,0 +1,15 @@
+node_modules
+dist
+.dockerignore
+.gitignore
+.git
+Dockerfile
+nodemon.json
+package-lock.json
+README.md
+requests.http
+.next
+out
+
+# production
+build
