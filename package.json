@@ -6,7 +6,7 @@
     "dev": "next dev -p 4000",
     "analyze": "ANALYZE=true next build",
     "build": "next build",
-    "start": "npm run build && next start",
+    "start": "npm run build && next start -p 4000",
     "lint": "next lint"
   },
   "dependencies": {

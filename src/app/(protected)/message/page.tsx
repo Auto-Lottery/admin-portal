@@ -1,6 +1,6 @@
 "use client";
 import { useClientRequest } from '@/contexts/client-request-context';
-import { Box, Button, Group, Radio, Select, Stack, Tabs, Text, TextInput, Textarea } from '@mantine/core'
+import { Box, Button, Group, Radio, Select, Stack, Tabs, Textarea } from '@mantine/core'
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import React, { useState } from 'react'
@@ -15,7 +15,10 @@ const Message = () => {
             smsBody: "",
             operator: "MOBICOM",
             toNumberList: ""
-        }
+        },
+        validate: {
+            smsBody: (value) => (value.length < 168 ? 'Текстийн хэмжээ 168 тэмдэгтээс бага байх ёстой' : null),
+        },
     });
 
     const operatorsData = [{
@@ -24,6 +27,12 @@ const Message = () => {
     }, {
         label: 'Unitel',
         value: "UNITEL"
+    }, {
+        label: 'Gmobile',
+        value: "GMOBILE"
+    }, {
+        label: 'Skytel',
+        value: "SKYTEL"
     }];
 
     const sendMassSms = async ({ isExternal,
@@ -95,7 +104,7 @@ const Message = () => {
                             <Textarea
                                 label="Илгээх текст"
                                 {...sendSmsForm.getInputProps('smsBody')}
-                                placeholder="Мессежээр илгээх текст энд бичнэ үү"
+                                placeholder="Мессежээр илгээх текст латинаар бичнэ үү"
                             />
 
                             <Button w={150} loading={loading} loaderProps={{ type: 'dots' }} type="submit">Илгээх</Button>

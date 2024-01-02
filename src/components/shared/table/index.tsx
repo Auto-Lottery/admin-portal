@@ -97,7 +97,6 @@ const CustomTable = ({
                     onNextPage={() => {
                         const nextPage = pagination.page + 1
                         if (totalPage >= nextPage) {
-                            console.log("qork")
                             changePage(nextPage)
                         }
                     }}
