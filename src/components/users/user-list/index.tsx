@@ -1,19 +1,20 @@
 "use client";
+
 import React, { useCallback, useEffect, useState } from "react";
 import { Badge } from "@mantine/core";
 import dayjs from "dayjs";
 import { User } from "@/types/user";
 import { useClientRequest } from "@/contexts/client-request-context";
 import { PaginationOption } from "@/types/pagination";
-import CustomTable, { RowItemType } from "@/components/shared/table";
-import { TableColumnConfig } from "@/types/table";
+import CustomTable from "@/components/shared/table";
+import { RowItemType, TableColumnConfig } from "@/types/table";
 import { useRouter } from "next/navigation";
 
-const UserList = ({
+function UserList({
   filters,
 }: {
   filters: Record<string, string | number>;
-}) => {
+}) {
   const [isMounted, setIsMounted] = useState(false);
   const [userList, setUserList] = useState<User[]>([]);
   const { postRequest } = useClientRequest();
@@ -30,17 +31,15 @@ const UserList = ({
     async ({ page, pageSize, filtersData }: PaginationOption) => {
       const res = await postRequest(`/auth/admin/users`, {
         pagination: {
-          page: page,
-          pageSize: pageSize,
+          page,
+          pageSize,
         },
-        conditions: Object.keys(filtersData).map((key) => {
-          return {
-            field: key,
-            value: filtersData[key],
-            valueType: typeof filtersData[key],
-            operator: key === "operator" ? "=" : "like",
-          };
-        }),
+        conditions: Object.keys(filtersData).map((key) => ({
+          field: key,
+          value: filtersData[key],
+          valueType: typeof filtersData[key],
+          operator: key === "operator" ? "=" : "like",
+        })),
       });
       setUserList(res.userList);
       setTotalRow(res.total);
@@ -124,27 +123,19 @@ const UserList = ({
   const columnConfig: TableColumnConfig[] = [
     {
       label: "#",
-      renderCell: (_, rowIndex) => {
-        return (pagination.page - 1) * pagination.pageSize + rowIndex + 1;
-      },
+      renderCell: (_, rowIndex) => (pagination.page - 1) * pagination.pageSize + rowIndex + 1,
     },
     {
       label: "Утасны дугаар",
-      renderCell: (rowData: RowItemType) => {
-        return rowData?.phoneNumber;
-      },
+      renderCell: (rowData: RowItemType) => rowData?.phoneNumber,
     },
     {
       label: "Оператор",
-      renderCell: (rowData: RowItemType) => {
-        return renderOperator(rowData as User);
-      },
+      renderCell: (rowData: RowItemType) => renderOperator(rowData as User),
     },
     {
       label: "Бүртгүүлсэн огноо",
-      renderCell: (rowData: RowItemType) => {
-        return dayjs(rowData?.createdDate).format("YYYY-MM-DD HH:mm:ss");
-      },
+      renderCell: (rowData: RowItemType) => dayjs(rowData?.createdDate).format("YYYY-MM-DD HH:mm:ss"),
     },
   ];
 
@@ -158,9 +149,9 @@ const UserList = ({
       onSelectRow={(rowData: RowItemType) => {
         router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
       }}
-      highlightOnHover={true}
+      highlightOnHover
     />
   );
-};
+}
 
 export default UserList;

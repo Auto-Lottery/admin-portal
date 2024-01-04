@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import { clientRequest } from "@/config";
@@ -13,12 +14,8 @@ interface ClientRequestContextType {
 }
 
 const ClientRequestContext = createContext<ClientRequestContextType>({
-  postRequest: (_url: string, _data?: any, _config?: any) => {
-    return Promise.resolve(null);
-  },
-  getRequest: (_url: string, _config?: any) => {
-    return Promise.resolve(null);
-  },
+  postRequest: (_url: string, _data?: any, _config?: any) => Promise.resolve(null),
+  getRequest: (_url: string, _config?: any) => Promise.resolve(null),
 });
 
 export const useClientRequest = () => {
@@ -58,16 +55,13 @@ function ClientRequestProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const postRequest = (url: string, data: any, config?: any): any => {
-    return responseChecker(clientRequest.post(url, data, config));
-  };
+  const postRequest = (url: string, data: any, config?: any): any => responseChecker(clientRequest.post(url, data, config));
 
-  const getRequest = (url: string, config?: any) => {
-    return responseChecker(clientRequest.get(url, config));
-  };
+  const getRequest = (url: string, config?: any) => responseChecker(clientRequest.get(url, config));
 
   return (
     <ClientRequestContext.Provider
+      // eslint-disable-next-line react/jsx-no-constructed-context-values
       value={{
         postRequest,
         getRequest,

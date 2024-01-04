@@ -4,10 +4,10 @@ import { ActionIcon, Badge, Group } from "@mantine/core";
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 import { TbEdit } from "react-icons/tb";
-import CustomTable, { RowItemType } from "@/components/shared/table";
+import CustomTable from "@/components/shared/table";
 import { useClientRequest } from "@/contexts/client-request-context";
 import { PaginationOption } from "@/types/pagination";
-import { TableColumnConfig } from "@/types/table";
+import { RowItemType, TableColumnConfig } from "@/types/table";
 import { Transaction } from "@/types/transaction";
 import { moneyFormatter } from "@/utilities";
 
