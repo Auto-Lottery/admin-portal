@@ -1,5 +1,23 @@
 import crypto from "crypto";
 
+export const operatorsData = [
+  {
+    label: "Mobicom",
+    value: "MOBICOM",
+  },
+  {
+    label: "Unitel",
+    value: "UNITEL",
+  },
+  {
+    label: "Gmobile",
+    value: "GMOBILE",
+  },
+  {
+    label: "Skytel",
+    value: "SKYTEL",
+  },
+];
 export const encryptData = (plaintext: string, isClient: boolean = false) => {
   const secretKey =
     (isClient ? process.env.DATA_SECRET : global.process.env.DATA_SECRET) || "";
@@ -28,7 +46,7 @@ export const dataDecrypt = (
 export const moneyFormatter = (
   numberValue: number,
   minPrecision: number,
-  maxPrecision: number,
+  maxPrecision: number
 ) => {
   if (typeof numberValue === "number" && !isNaN(numberValue)) {
     return new Intl.NumberFormat("ja-JP", {

@@ -1,5 +1,7 @@
+import { RowItemType } from "@/components/shared/table";
+
 export type TableColumnConfig = {
   label?: string;
   value?: string | number;
-  renderCell: (rowData: any, rowIndex: number) => React.ReactNode;
+  renderCell: (rowData: RowItemType, rowIndex: number) => React.ReactNode;
 };

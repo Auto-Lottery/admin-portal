@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getLoggedUserCookie } from "@/services/auth-service";
 import axios, { AxiosError } from "axios";
 import { redirect } from "next/navigation";

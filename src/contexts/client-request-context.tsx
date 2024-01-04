@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { clientRequest } from "@/config";
@@ -12,10 +13,10 @@ interface ClientRequestContextType {
 }
 
 const ClientRequestContext = createContext<ClientRequestContextType>({
-  postRequest: (url: string, data?: any, config?: any) => {
+  postRequest: (_url: string, _data?: any, _config?: any) => {
     return Promise.resolve(null);
   },
-  getRequest: (url: string, config?: any) => {
+  getRequest: (_url: string, _config?: any) => {
     return Promise.resolve(null);
   },
 });

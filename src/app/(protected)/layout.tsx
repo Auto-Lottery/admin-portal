@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ProtectedLayout from '@/components/layout';
+import ProtectedLayout from "@/components/layout";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -13,9 +13,7 @@ export default function ProtectedRootLayout({
 }) {
   return (
     <>
-      <ProtectedLayout>
-        {children}
-      </ProtectedLayout>
+      <ProtectedLayout>{children}</ProtectedLayout>
     </>
   );
 }

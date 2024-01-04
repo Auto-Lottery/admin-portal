@@ -11,14 +11,13 @@ export async function POST(req: NextRequest) {
     url,
     bodyData
   )) as CustomResponse<AdminUserWithToken>;
-  let response = NextResponse.json(res);
+  const response = NextResponse.json(res);
   if (res.code === 200) {
     const jsonString = JSON.stringify(res.data);
     const encryptedResult = encryptData(jsonString);
     response.cookies.set("AUTO_COOKIE", encryptedResult, {
       expires: (res.data.exp || 0) * 1000,
       path: "/",
-      secure: true,
     });
   }
 

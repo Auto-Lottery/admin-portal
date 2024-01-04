@@ -9,9 +9,7 @@ import {
   UnstyledButton,
   rem,
 } from "@mantine/core";
-import {
-  TbLogout,
-} from "react-icons/tb";
+import { TbLogout } from "react-icons/tb";
 import classes from "./index.module.css";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
@@ -21,8 +19,8 @@ const LeftSideNavbar = ({
   active,
   menuData,
 }: {
-  active: string,
-  menuData: MenuItem[]
+  active: string;
+  menuData: MenuItem[];
 }) => {
   const router = useRouter();
   const { logout } = useAuth();
@@ -44,14 +42,19 @@ const LeftSideNavbar = ({
           {menuData.map((item, index) => {
             return (
               <React.Fragment key={`menu_${index}`}>
-                <a href={item.href} className={classes.menuItemButton} data-active={item.key === active || undefined} onClick={(e) => {
-                  e.preventDefault();
-                  // setIsOpenMenu(prev => ({
-                  //   ...prev,
-                  //   [item.label]: !prev[item.label]
-                  // }));
-                  router.push(item.href);
-                }}>
+                <a
+                  href={item.href}
+                  className={classes.menuItemButton}
+                  data-active={item.key === active || undefined}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    // setIsOpenMenu(prev => ({
+                    //   ...prev,
+                    //   [item.label]: !prev[item.label]
+                    // }));
+                    router.push(item.href);
+                  }}
+                >
                   <item.icon className={classes.menuItemIcon} />
                   <span>{item.label}</span>
                 </a>
@@ -62,7 +65,8 @@ const LeftSideNavbar = ({
                         <UnstyledButton
                           key={`subMenu_${subIndex}`}
                           className={classes.menuItemButton}
-                          data-active={subItem.label === active || undefined} onClick={() => { }}
+                          data-active={subItem.label === active || undefined}
+                          onClick={() => {}}
                         >
                           <span>{subItem.label}</span>
                         </UnstyledButton>
@@ -82,7 +86,7 @@ const LeftSideNavbar = ({
           <span>Гарах</span>
         </UnstyledButton>
       </div>
-    </nav >
+    </nav>
   );
 };
 
