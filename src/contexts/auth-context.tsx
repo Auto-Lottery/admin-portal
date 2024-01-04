@@ -20,8 +20,8 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
-  login: async () => { },
-  logout: () => { },
+  login: async () => {},
+  logout: () => {},
   user: undefined,
   isLogged: false,
 });
@@ -78,7 +78,7 @@ function AuthProvider({
     } else {
       checkAuth();
     }
-    return () => { };
+    return () => {};
   }, [checkAuth, checkTokenExpire, loggedUserData]);
 
   const login = async () => {

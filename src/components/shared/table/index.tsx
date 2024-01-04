@@ -11,7 +11,7 @@ const CustomTable = ({
   rowKeyField,
   pagination,
   highlightOnHover = false,
-  onSelectRow = () => { },
+  onSelectRow = () => {},
   setPagination,
 }: {
   data: Array<RowItemType>;
@@ -54,7 +54,7 @@ const CustomTable = ({
           style={{
             cursor: highlightOnHover ? "pointer" : undefined,
           }}
-        // bg={isOpenRow ? 'var(--mantine-color-blue-light)' : undefined}
+          // bg={isOpenRow ? 'var(--mantine-color-blue-light)' : undefined}
         >
           {columnConfig.map((config, index) => {
             return (

@@ -98,7 +98,8 @@ function TransactionList({
     },
     {
       label: "Төлөв",
-      renderCell: (rowData: RowItemType) => renderStatus(rowData?.status as string),
+      renderCell: (rowData: RowItemType) =>
+        renderStatus(rowData?.status as string),
     },
     {
       label: "Тайлбар",
