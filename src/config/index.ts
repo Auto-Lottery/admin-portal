@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const clientRequest = axios.create({});
 
 clientRequest.interceptors.request.use(
@@ -17,19 +18,14 @@ clientRequest.interceptors.request.use(
     }
     return config;
   },
-  function (error) {
+  (error) =>
     // Do something with request error
 
-    return Promise.reject(error);
-  }
+    Promise.reject(error)
 );
 
 // Add a response interceptor
 clientRequest.interceptors.response.use(
-  function (response) {
-    return response.data;
-  },
-  function (error) {
-    return Promise.reject(error);
-  }
+  (response) => response.data,
+  (error) => Promise.reject(error)
 );

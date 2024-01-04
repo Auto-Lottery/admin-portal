@@ -1,18 +1,19 @@
 "use client";
-import UserLotteryList from "@/components/users/user-lottery-list";
-import UserTransactionList from "@/components/users/user-transaction-list";
+
 import { Box, Group, Tabs, Text } from "@mantine/core";
 import React from "react";
+import UserLotteryList from "@/components/users/user-lottery-list";
+import UserTransactionList from "@/components/users/user-transaction-list";
 
-const UserDetail = ({ params }: { params: { slug: string[] } }) => {
+function UserDetail({ params }: { params: { slug: string[] } }) {
   return (
     <Box mt="md" px="md" pb="md">
-      <Group gap={80} mb={"lg"}>
+      <Group gap={80} mb="lg">
         <div>
           <Text size="md" c="dimmed">
             ID
           </Text>
-          <Text size="md" fw={"bold"}>
+          <Text size="md" fw="bold">
             {params.slug[0]}
           </Text>
         </div>
@@ -20,7 +21,7 @@ const UserDetail = ({ params }: { params: { slug: string[] } }) => {
           <Text size="md" c="dimmed">
             Утасны дугаар
           </Text>
-          <Text size="md" fw={"bold"}>
+          <Text size="md" fw="bold">
             {params.slug[1]}
           </Text>
         </div>
@@ -31,10 +32,10 @@ const UserDetail = ({ params }: { params: { slug: string[] } }) => {
           <Tabs.Tab value="transaction">Гүйлгээний мэдээлэл</Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Panel value="lottery" pt={"md"}>
+        <Tabs.Panel value="lottery" pt="md">
           <UserLotteryList userId={params.slug[0]} />
         </Tabs.Panel>
-        <Tabs.Panel value="transaction" pt={"md"}>
+        <Tabs.Panel value="transaction" pt="md">
           <UserTransactionList
             userData={{
               userId: params.slug[0],
@@ -45,6 +46,6 @@ const UserDetail = ({ params }: { params: { slug: string[] } }) => {
       </Tabs>
     </Box>
   );
-};
+}
 
 export default UserDetail;

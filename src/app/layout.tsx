@@ -4,8 +4,8 @@ import "@mantine/notifications/styles.css";
 import type { Metadata } from "next";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { theme } from "@/config/theme";
-import { Providers } from "./providers";
 import { getLoggedUserCookie } from "@/services/auth-service";
+import { Providers } from "./providers";
 
 // import { Inter } from "next/font/google";
 // const inter = Inter({ subsets: ["latin"] });

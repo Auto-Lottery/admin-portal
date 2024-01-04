@@ -1,17 +1,15 @@
 import { PaginationOption } from "@/types/pagination";
-import { TableColumnConfig } from "@/types/table";
+import { RowItemType, TableColumnConfig } from "@/types/table";
 import { Group, Pagination, Table, Text } from "@mantine/core";
 import React from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type RowItemType = Record<string, any> | undefined;
-const CustomTable = ({
+function CustomTable({
   data = [],
   columnConfig = [],
   rowKeyField,
   pagination,
   highlightOnHover = false,
-  onSelectRow = () => {},
+  onSelectRow = () => { },
   setPagination,
 }: {
   data: Array<RowItemType>;
@@ -21,7 +19,7 @@ const CustomTable = ({
   highlightOnHover?: boolean;
   onSelectRow?: (rowData: RowItemType) => void;
   setPagination: React.Dispatch<React.SetStateAction<PaginationOption>>;
-}) => {
+}) {
   // const [selectedRow, setSelectedRow] = useState<RowItemType>();
   const totalPage =
     pagination.total / pagination.pageSize +
@@ -37,34 +35,30 @@ const CustomTable = ({
   };
 
   const changePage = (page: number) => {
-    setPagination((prev) => {
-      return {
-        ...prev,
-        page,
-      };
-    });
+    setPagination((prev) => ({
+      ...prev,
+      page,
+    }));
   };
 
-  const rows = data.map((rowData, rowIndex) => {
-    // const isOpenRow = selectedRow?.[rowKeyField] === rowData?.[rowKeyField];
-    return (
-      <React.Fragment key={rowData?.[rowKeyField]}>
-        <Table.Tr
-          onClick={() => handleSelectRow(rowData)}
-          style={{
-            cursor: highlightOnHover ? "pointer" : undefined,
-          }}
-          // bg={isOpenRow ? 'var(--mantine-color-blue-light)' : undefined}
-        >
-          {columnConfig.map((config, index) => {
-            return (
-              <Table.Td key={index}>
-                {config?.renderCell(rowData, rowIndex)}
-              </Table.Td>
-            );
-          })}
-        </Table.Tr>
-        {/* <Table.Tr style={{
+  const rows = data.map((rowData, rowIndex) =>
+  // const isOpenRow = selectedRow?.[rowKeyField] === rowData?.[rowKeyField];
+  (
+    <React.Fragment key={rowData?.[rowKeyField]}>
+      <Table.Tr
+        onClick={() => handleSelectRow(rowData)}
+        style={{
+          cursor: highlightOnHover ? "pointer" : undefined,
+        }}
+      // bg={isOpenRow ? 'var(--mantine-color-blue-light)' : undefined}
+      >
+        {columnConfig.map((config, index) => (
+          <Table.Td key={index}>
+            {config?.renderCell(rowData, rowIndex)}
+          </Table.Td>
+        ))}
+      </Table.Tr>
+      {/* <Table.Tr style={{
                     borderBottomWidth: isOpenRow ? 1 : 0
                 }}>
                     <Table.Td colSpan={2} py={0} m={0}>
@@ -73,9 +67,9 @@ const CustomTable = ({
                         </Collapse>
                     </Table.Td>
                 </Table.Tr > */}
-      </React.Fragment>
-    );
-  });
+    </React.Fragment>
+  )
+  );
 
   return (
     <>
@@ -87,16 +81,14 @@ const CustomTable = ({
       >
         <Table.Thead>
           <Table.Tr>
-            {columnConfig.map((item, index) => {
-              return <Table.Th key={index}>{item?.label}</Table.Th>;
-            })}
+            {columnConfig.map((item, index) => <Table.Th key={index}>{item?.label}</Table.Th>)}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
         {/* <Table.Caption>Scroll page to see sticky thead</Table.Caption> */}
       </Table>
       <Group mt="md" justify="space-between">
-        <div></div>
+        <div />
         <Pagination
           total={totalPage}
           boundaries={3}
@@ -125,6 +117,6 @@ const CustomTable = ({
       </Group>
     </>
   );
-};
+}
 
 export default CustomTable;

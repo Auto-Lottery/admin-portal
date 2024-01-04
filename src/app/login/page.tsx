@@ -1,12 +1,13 @@
 "use client";
+
 import React from "react";
 import { Paper, TextInput, PasswordInput, Button, Title } from "@mantine/core";
-import classes from "./index.module.css";
 import { useForm } from "@mantine/form";
 import { useClientRequest } from "@/contexts/client-request-context";
 import { useAuth } from "@/contexts/auth-context";
+import classes from "./index.module.css";
 
-const LoginPage = () => {
+function LoginPage() {
   const { postRequest } = useClientRequest();
   const { login } = useAuth();
 
@@ -86,9 +87,9 @@ const LoginPage = () => {
           </Button>
         </Paper>
       </form>
-      <div className={classes.bg}></div>
+      <div className={classes.bg} />
     </div>
   );
-};
+}
 
 export default LoginPage;

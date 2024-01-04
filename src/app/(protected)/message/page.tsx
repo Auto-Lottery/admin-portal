@@ -47,12 +47,12 @@ function Message() {
     toNumberList: string;
   }) => {
     setLoading(true);
-    const _isExternal = isExternal === "external";
+    const tempIsExternal = isExternal === "external";
     const requestData = {
       smsBody,
       operator,
-      isExternal: _isExternal,
-      toNumberList: _isExternal ? toNumberList.trim().split(",") : [],
+      isExternal: tempIsExternal,
+      toNumberList: tempIsExternal ? toNumberList.trim().split(",") : [],
     };
     const res = await postRequest("/message/sms/sendMassSms", requestData);
 

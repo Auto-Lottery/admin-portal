@@ -1,18 +1,19 @@
 "use client";
-import CustomTable, { RowItemType } from "@/components/shared/table";
+
+import CustomTable from "@/components/shared/table";
 import { useClientRequest } from "@/contexts/client-request-context";
 import { PaginationOption } from "@/types/pagination";
-import { TableColumnConfig } from "@/types/table";
+import { RowItemType, TableColumnConfig } from "@/types/table";
 import { Transaction } from "@/types/transaction";
 import { moneyFormatter } from "@/utilities";
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
-const UserTransactionList = ({
+function UserTransactionList({
   userData,
 }: {
   userData: { userId: string; phoneNumber: string };
-}) => {
+}) {
   const [listData, setListData] = useState<Transaction[]>([]);
   const { getRequest } = useClientRequest();
   const [totalRow, setTotalRow] = useState(0);
@@ -31,7 +32,7 @@ const UserTransactionList = ({
       setListData(res.listData);
       setTotalRow(res.total);
     },
-    [getRequest]
+    [getRequest, userData]
   );
 
   useEffect(() => {
@@ -41,33 +42,23 @@ const UserTransactionList = ({
   const columnConfig: TableColumnConfig[] = [
     {
       label: "#",
-      renderCell: (_, rowIndex: number) => {
-        return (pagination.page - 1) * pagination.pageSize + rowIndex + 1;
-      },
+      renderCell: (_, rowIndex: number) => (pagination.page - 1) * pagination.pageSize + rowIndex + 1,
     },
     {
       label: "Гүйлгээний ID",
-      renderCell: (rowData: RowItemType) => {
-        return rowData?._id;
-      },
+      renderCell: (rowData: RowItemType) => rowData?._id,
     },
     {
       label: "Дүн",
-      renderCell: (rowData: RowItemType) => {
-        return `${moneyFormatter(rowData?.amount, 0, 2)} ₮`;
-      },
+      renderCell: (rowData: RowItemType) => `${moneyFormatter(rowData?.amount, 0, 2)} ₮`,
     },
     {
       label: "Гүйлгээний утга",
-      renderCell: (rowData: RowItemType) => {
-        return rowData?.tranDescription;
-      },
+      renderCell: (rowData: RowItemType) => rowData?.tranDescription,
     },
     {
       label: "Гүйлгээний огноо",
-      renderCell: (rowData: RowItemType) => {
-        return dayjs(rowData?.transactionDate).format("YYYY-MM-DD HH:mm:ss");
-      },
+      renderCell: (rowData: RowItemType) => dayjs(rowData?.transactionDate).format("YYYY-MM-DD HH:mm:ss"),
     },
   ];
 
@@ -83,6 +74,6 @@ const UserTransactionList = ({
     // }}
     />
   );
-};
+}
 
 export default UserTransactionList;

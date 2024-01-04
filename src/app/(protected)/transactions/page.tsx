@@ -1,17 +1,18 @@
 "use client";
-import Filter from "@/components/shared/filter";
-import TransactionList from "@/components/transactions/transaction-list";
+
 import { Box, Button, Group, Text } from "@mantine/core";
 import React, { useState } from "react";
+import Filter from "@/components/shared/filter";
+import TransactionList from "@/components/transactions/transaction-list";
 
-const Transactions = () => {
+function Transactions() {
   const [filters, setFilters] = useState({});
 
   return (
     <Box mt="md" px="md" pb="md">
       <Group align="center" justify="space-between" mb="md">
         <Text>Гүйлгээний жагсаалт</Text>
-        <Group gap={"sm"}>
+        <Group gap="sm">
           <Button size="xs" type="button">
             Гараар гүйлгээ үүсгэх
           </Button>
@@ -63,6 +64,6 @@ const Transactions = () => {
       <TransactionList filters={filters} />
     </Box>
   );
-};
+}
 
 export default Transactions;

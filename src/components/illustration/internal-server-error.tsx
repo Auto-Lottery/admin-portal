@@ -1,6 +1,6 @@
-const InternalServerErrorIllusration = (
-  props: React.ComponentPropsWithoutRef<"svg">
-) => {
+import React from "react";
+
+function InternalServerErrorIllusration(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,6 +14,6 @@ const InternalServerErrorIllusration = (
       />
     </svg>
   );
-};
+}
 
 export default InternalServerErrorIllusration;

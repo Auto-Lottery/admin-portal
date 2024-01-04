@@ -1,7 +1,8 @@
 "use client";
+
 import React, { useState } from "react";
-import UserList from "@/components/users/user-list";
 import { Box, Group, Text } from "@mantine/core";
+import UserList from "@/components/users/user-list";
 import { operatorsData } from "@/utilities";
 import Filter from "@/components/shared/filter";
 

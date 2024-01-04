@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import ProtectedLayout from "@/components/layout";
 
@@ -12,8 +13,6 @@ export default function ProtectedRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <ProtectedLayout>{children}</ProtectedLayout>
-    </>
+    <ProtectedLayout>{children}</ProtectedLayout>
   );
 }

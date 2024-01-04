@@ -7,10 +7,12 @@ import React, {
   useEffect,
   useContext,
   useCallback,
+  useMemo,
 } from "react";
-import { useClientRequest } from "./client-request-context";
 import { redirect, usePathname } from "next/navigation";
 import { AdminUser, AdminUserWithToken } from "@/types/user";
+import { useClientRequest } from "./client-request-context";
+
 interface AuthContextType {
   login: () => Promise<void>;
   logout: () => void;
@@ -20,8 +22,8 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
-  login: async () => {},
-  logout: () => {},
+  login: async () => { },
+  logout: () => { },
   user: undefined,
   isLogged: false,
 });
@@ -48,43 +50,6 @@ function AuthProvider({
   const [loading, setLoading] = useState<boolean>(true);
   const pathname = usePathname();
 
-  const checkTokenExpire = useCallback((loggedUserData: AdminUserWithToken) => {
-    const { exp, token, ...userData } = loggedUserData;
-    if (exp && Date.now() < exp * 1000 && token) {
-      localStorage.setItem("token", token);
-      setUser(userData);
-      setToken(token);
-      setIsLogged(true);
-      setLoading(false);
-      return;
-    } else {
-      logout();
-    }
-  }, []);
-
-  const checkAuth = useCallback(async () => {
-    const res = await getRequest("/api/checkAuth");
-    if (res === null) {
-      logout();
-      return;
-    }
-    const lud = res as AdminUserWithToken;
-    checkTokenExpire(lud);
-  }, [getRequest]);
-
-  useEffect(() => {
-    if (loggedUserData) {
-      checkTokenExpire(loggedUserData);
-    } else {
-      checkAuth();
-    }
-    return () => {};
-  }, [checkAuth, checkTokenExpire, loggedUserData]);
-
-  const login = async () => {
-    checkAuth();
-  };
-
   const logout = useCallback(async () => {
     await getRequest("/api/logout");
     setIsLogged(false);
@@ -97,7 +62,56 @@ function AuthProvider({
     ) {
       window.location.replace("/login");
     }
-  }, []);
+  }, [getRequest, pathname]);
+
+  const checkTokenExpire = useCallback((passloggedUserData: AdminUserWithToken) => {
+    const { exp, token: tempToken, ...userData } = passloggedUserData;
+    if (exp && Date.now() < exp * 1000 && tempToken) {
+      localStorage.setItem("token", tempToken);
+      setUser(userData);
+      setToken(tempToken);
+      setIsLogged(true);
+      setLoading(false);
+
+    } else {
+      logout();
+    }
+  }, [logout]);
+
+  const checkAuth = useCallback(async () => {
+    const res = await getRequest("/api/checkAuth");
+    if (res === null) {
+      logout();
+      return;
+    }
+    const lud = res as AdminUserWithToken;
+    checkTokenExpire(lud);
+  }, [getRequest, checkTokenExpire, logout]);
+
+  useEffect(() => {
+    if (loggedUserData) {
+      checkTokenExpire(loggedUserData);
+    } else {
+      checkAuth();
+    }
+    return () => { };
+  }, [checkAuth, checkTokenExpire, loggedUserData]);
+
+  const login = useCallback(async () => {
+    checkAuth();
+  }, [checkAuth]);
+
+  const data = useMemo(() => ({
+    isLogged,
+    user,
+    token,
+    logout,
+    login
+  }), [isLogged,
+    user,
+    token,
+    logout,
+    login]);
 
   if (loading) {
     return null;
@@ -111,18 +125,14 @@ function AuthProvider({
     return redirect("/");
   }
 
+
+
   return (
     <AuthContext.Provider
-      value={{
-        isLogged,
-        user,
-        token,
-        login,
-        logout,
-      }}
+      value={data}
     >
       {children}
-    </AuthContext.Provider>
+    </AuthContext.Provider >
   );
 }
 

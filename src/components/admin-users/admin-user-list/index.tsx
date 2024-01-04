@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import CustomTable, { RowItemType } from "@/components/shared/table";
-import { useClientRequest } from "@/contexts/client-request-context";
-import { PaginationOption } from "@/types/pagination";
-import { TableColumnConfig } from "@/types/table";
-import { AdminUser, User } from "@/types/user";
 import { Badge, Group } from "@mantine/core";
 import dayjs from "dayjs";
+import CustomTable from "@/components/shared/table";
+import { useClientRequest } from "@/contexts/client-request-context";
+import { PaginationOption } from "@/types/pagination";
+import { RowItemType, TableColumnConfig } from "@/types/table";
+import { AdminUser, User } from "@/types/user";
 
-const AdminUserList = ({
+function AdminUserList({
     filters,
 }: {
     filters: Record<string, string | number>;
-}) => {
+}) {
     const [isMounted, setIsMounted] = useState(false);
     const [userList, setUserList] = useState<AdminUser[]>([]);
     const { postRequest } = useClientRequest();
@@ -29,17 +29,15 @@ const AdminUserList = ({
         async ({ page, pageSize, filtersData }: PaginationOption) => {
             const res = await postRequest(`/auth/admin/adminUsers`, {
                 pagination: {
-                    page: page,
-                    pageSize: pageSize,
+                    page,
+                    pageSize,
                 },
-                conditions: Object.keys(filtersData).map((key) => {
-                    return {
-                        field: key,
-                        value: filtersData[key],
-                        valueType: typeof filtersData[key],
-                        operator: key === "operator" ? "=" : "like",
-                    };
-                }),
+                conditions: Object.keys(filtersData).map((key) => ({
+                    field: key,
+                    value: filtersData[key],
+                    valueType: typeof filtersData[key],
+                    operator: key === "operator" ? "=" : "like",
+                })),
             });
             setUserList(res.userList);
             setTotalRow(res.total);
@@ -126,32 +124,22 @@ const AdminUserList = ({
     const columnConfig: TableColumnConfig[] = [
         {
             label: "#",
-            renderCell: (_, rowIndex) => {
-                return (pagination.page - 1) * pagination.pageSize + rowIndex + 1;
-            },
+            renderCell: (_, rowIndex) => (pagination.page - 1) * pagination.pageSize + rowIndex + 1,
         },
         {
             label: "Утасны дугаар",
-            renderCell: (rowData: RowItemType) => {
-                return rowData?.phoneNumber;
-            },
+            renderCell: (rowData: RowItemType) => rowData?.phoneNumber,
         },
         {
             label: "Оператор",
-            renderCell: (rowData: RowItemType) => {
-                return renderOperator(rowData as User);
-            },
+            renderCell: (rowData: RowItemType) => renderOperator(rowData as User),
         },
         {
             label: "Үүрэг",
-            renderCell: (rowData: RowItemType) => {
-                return <Group gap={"sm"}>
-                    {rowData?.roles.map((role: string, index: number) => {
-                        return <Badge variant="outline" color="indigo" key={`role_${index}`}>{role}</Badge>
-                    })
-                    }
-                </Group>
-            },
+            renderCell: (rowData: RowItemType) => <Group gap="sm">
+                {rowData?.roles.map((role: string, index: number) => <Badge variant="outline" color="indigo" key={`role_${index}`}>{role}</Badge>)
+                }
+            </Group>,
         },
         {
             label: "Төлөв",
@@ -163,9 +151,7 @@ const AdminUserList = ({
         },
         {
             label: "Бүртгүүлсэн огноо",
-            renderCell: (rowData: RowItemType) => {
-                return dayjs(rowData?.createdDate).format("YYYY-MM-DD HH:mm:ss");
-            },
+            renderCell: (rowData: RowItemType) => dayjs(rowData?.createdDate).format("YYYY-MM-DD HH:mm:ss"),
         }
     ];
 
@@ -179,6 +165,6 @@ const AdminUserList = ({
             highlightOnHover={false}
         />
     );
-};
+}
 
 export default AdminUserList;

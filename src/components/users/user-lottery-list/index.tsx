@@ -1,14 +1,15 @@
 "use client";
+
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { User } from "@/types/user";
 import { useClientRequest } from "@/contexts/client-request-context";
 import { PaginationOption } from "@/types/pagination";
-import CustomTable, { RowItemType } from "@/components/shared/table";
-import { TableColumnConfig } from "@/types/table";
+import CustomTable from "@/components/shared/table";
+import { RowItemType, TableColumnConfig } from "@/types/table";
 import { Badge } from "@mantine/core";
 
-const UserLotteryList = ({ userId }: { userId: string }) => {
+function UserLotteryList({ userId }: { userId: string }) {
   const [userLotteryList, setUserLotteryList] = useState<User[]>([]);
   const { postRequest } = useClientRequest();
   const [totalRow, setTotalRow] = useState(0);
@@ -31,14 +32,14 @@ const UserLotteryList = ({ userId }: { userId: string }) => {
           },
         ],
         pagination: {
-          page: page,
-          pageSize: pageSize,
+          page,
+          pageSize,
         },
       });
       setUserLotteryList(res.userLotteryList);
       setTotalRow(res.total);
     },
-    [postRequest]
+    [postRequest, userId]
   );
 
   useEffect(() => {
@@ -48,43 +49,31 @@ const UserLotteryList = ({ userId }: { userId: string }) => {
   const columnConfig: TableColumnConfig[] = [
     {
       label: "#",
-      renderCell: (_, rowIndex) => {
-        return (pagination.page - 1) * pagination.pageSize + rowIndex + 1;
-      },
+      renderCell: (_, rowIndex) => (pagination.page - 1) * pagination.pageSize + rowIndex + 1,
     },
     {
       label: "Тохиролын дугаар",
-      renderCell: (rowData: RowItemType) => {
-        return `${rowData?.tohirol?.tohirolNumber}-р тохирол`;
-      },
+      renderCell: (rowData: RowItemType) => `${rowData?.tohirol?.tohirolNumber}-р тохирол`,
     },
     {
       label: "Cерийн дугаар",
-      renderCell: (rowData: RowItemType) => {
-        return rowData?.seriesNumberStr;
-      },
+      renderCell: (rowData: RowItemType) => rowData?.seriesNumberStr,
     },
     {
       label: "Гүйлгээний ID",
-      renderCell: (rowData: RowItemType) => {
-        return rowData?.transactionId;
-      },
+      renderCell: (rowData: RowItemType) => rowData?.transactionId,
     },
     {
       label: "Төлөв",
-      renderCell: (rowData: RowItemType) => {
-        return rowData?.tohirol?.isActive ? (
-          <Badge color="green">Идэвхитэй</Badge>
-        ) : (
-          <Badge color="grey">Идэвхигүй</Badge>
-        );
-      },
+      renderCell: (rowData: RowItemType) => rowData?.tohirol?.isActive ? (
+        <Badge color="green">Идэвхитэй</Badge>
+      ) : (
+        <Badge color="grey">Идэвхигүй</Badge>
+      ),
     },
     {
       label: "Үүссэн огноо",
-      renderCell: (rowData: RowItemType) => {
-        return dayjs(rowData?.createdDate).format("YYYY-MM-DD HH:mm:ss");
-      },
+      renderCell: (rowData: RowItemType) => dayjs(rowData?.createdDate).format("YYYY-MM-DD HH:mm:ss"),
     },
   ];
 
@@ -100,6 +89,6 @@ const UserLotteryList = ({ userId }: { userId: string }) => {
     // }}
     />
   );
-};
+}
 
 export default UserLotteryList;

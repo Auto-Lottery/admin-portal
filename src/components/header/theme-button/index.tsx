@@ -1,14 +1,15 @@
 "use client";
+
 import {
   ActionIcon,
   useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
 import React from "react";
-import classes from "./index.module.css";
 import { TbMoon, TbSun } from "react-icons/tb";
+import classes from "./index.module.css";
 
-const ThemeButtom = () => {
+function ThemeButtom() {
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("light");
 
@@ -22,6 +23,6 @@ const ThemeButtom = () => {
       <TbMoon className={`${classes.icon} ${classes.dark}`} />
     </ActionIcon>
   );
-};
+}
 
 export default ThemeButtom;

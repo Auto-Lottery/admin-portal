@@ -1,7 +1,6 @@
 "use client";
+
 import React, { useMemo } from "react";
-import LeftSideNavbar from "../leftside-navbar";
-import classes from "./index.module.css";
 import { Title } from "@mantine/core";
 import { usePathname } from "next/navigation";
 import {
@@ -12,21 +11,14 @@ import {
   TbMessage,
 } from "react-icons/tb";
 import { GrUserAdmin } from "react-icons/gr";
+import { MenuItem } from "@/types/menu";
+import classes from "./index.module.css";
+import LeftSideNavbar from "../leftside-navbar";
 
-export type MenuItem = {
-  key: string;
-  label: string;
-  icon: typeof TbGauge;
-  href: string;
-  links?: Array<{
-    label: string;
-  }>;
-};
-
-const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
+function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  const mockdata: MenuItem[] = [
+  const mockdata: MenuItem[] = useMemo(() => [
     { key: "dashboard", label: "Хянах самбар", href: "/", icon: TbGauge },
     {
       key: "users",
@@ -58,7 +50,7 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
       href: "/admin-users",
       icon: GrUserAdmin,
     },
-  ];
+  ], []);
 
   const activeMenu = useMemo(() => {
     const selectedMenuItem = mockdata.find((menuItem) =>
@@ -71,7 +63,7 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
       return selectedMenuItem;
     }
     return null;
-  }, [pathname]);
+  }, [pathname, mockdata]);
 
   return (
     <div className={classes.layoutContainer}>
@@ -84,6 +76,6 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
     </div>
   );
-};
+}
 
 export default ProtectedLayout;

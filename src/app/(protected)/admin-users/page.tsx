@@ -1,7 +1,5 @@
 'use client';
-import AdminUserList from "@/components/admin-users/admin-user-list";
-import Filter from "@/components/shared/filter";
-import { useClientRequest } from "@/contexts/client-request-context";
+
 import { ActionIcon, Box, Button, Checkbox, CopyButton, Group, Modal, Stack, Text, TextInput, Tooltip, rem } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -9,8 +7,11 @@ import React, { useState } from "react";
 import { TbCheck, TbCircleCheck, TbCopy } from "react-icons/tb";
 import { nanoid } from 'nanoid'
 import { notifications } from "@mantine/notifications";
+import { useClientRequest } from "@/contexts/client-request-context";
+import Filter from "@/components/shared/filter";
+import AdminUserList from "@/components/admin-users/admin-user-list";
 
-const AdminUsers = () => {
+function AdminUsers() {
   const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(false);
   const { postRequest } = useClientRequest();
@@ -53,8 +54,6 @@ const AdminUsers = () => {
         form.reset();
         close();
       }
-    } catch (err) {
-      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -63,7 +62,7 @@ const AdminUsers = () => {
   return <Box mt="md" px="md" pb="md">
     <Group align="center" justify="space-between" mb="md">
       <Text>Админ хэрэглэгчийн жагсаалт</Text>
-      <Group gap={"sm"}>
+      <Group gap="sm">
         <Button size="xs" type="button" onClick={() => {
           const pass = nanoid(6)
           setGeneratedPassword(pass);
@@ -135,6 +134,6 @@ const AdminUsers = () => {
     </Modal>
     <AdminUserList filters={filters} />
   </Box >
-};
+}
 
 export default AdminUsers;

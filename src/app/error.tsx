@@ -1,16 +1,18 @@
 "use client";
+
+import React from "react";
 import { Button, Container, Group, Text, Title } from "@mantine/core";
-import classes from "./error.module.css";
 import { useRouter } from "next/navigation";
 import InternalServerErrorIllusration from "@/components/illustration/internal-server-error";
+import classes from "./error.module.css";
 
 export default function Error({
   reset,
 }: {
-  error: Error & { digest?: string };
   reset: () => void;
 }) {
   const router = useRouter();
+
   return (
     <Container className={classes.root}>
       <div className={classes.inner}>

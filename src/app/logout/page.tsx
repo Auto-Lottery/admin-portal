@@ -1,11 +1,12 @@
 "use client";
+
 import { useAuth } from "@/contexts/auth-context";
 import React, { useEffect } from "react";
-import Loading from "../loading";
 import { notifications } from "@mantine/notifications";
 import { TbAlertCircle } from "react-icons/tb";
+import Loading from "../loading";
 
-const Logout = () => {
+function Logout() {
   const { logout } = useAuth();
 
   useEffect(() => {
@@ -17,9 +18,9 @@ const Logout = () => {
       message: "Таны хандах хугацаа дууссан байна.",
     });
     logout();
-  }, []);
+  }, [logout]);
 
   return <Loading />;
-};
+}
 
 export default Logout;

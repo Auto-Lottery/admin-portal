@@ -22,18 +22,12 @@ serverSideRequest.interceptors.request.use(
       return config;
     }
   },
-  function (error) {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 serverSideRequest.interceptors.response.use(
-  function (response) {
-    return response.data;
-  },
-  function (error) {
-    return Promise.reject(error);
-  }
+  (response) => response.data,
+  (error) => Promise.reject(error)
 );
 
 const responseChecker = async (request: Promise<any>) => {
@@ -51,13 +45,11 @@ const responseChecker = async (request: Promise<any>) => {
   }
 };
 
-const post = async (url: string, data: any, config?: any) => {
-  return responseChecker(serverSideRequest.post(url, data, config));
-};
+const post = async (url: string, data: any, config?: any) =>
+  responseChecker(serverSideRequest.post(url, data, config));
 
-const get = (url: string, config?: any) => {
-  return responseChecker(serverSideRequest.get(url, config));
-};
+const get = (url: string, config?: any) =>
+  responseChecker(serverSideRequest.get(url, config));
 
 const ssrRequests = {
   post,

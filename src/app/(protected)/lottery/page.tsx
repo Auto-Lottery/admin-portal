@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import LotteryList from "@/components/lottery/lottery-list";
 import { Box, Text } from "@mantine/core";
+import LotteryList from "@/components/lottery/lottery-list";
 
 function Lottery() {
   return (

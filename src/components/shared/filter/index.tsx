@@ -27,7 +27,7 @@ interface FilterFieldType {
 function Filter({
   formInitialValue,
   filterFields = [],
-  onFilter = () => {},
+  onFilter = () => { },
 }: {
   formInitialValue: Record<string, string | number | undefined>;
   filterFields: FilterFieldType[];
@@ -113,6 +113,7 @@ function Filter({
                   />
                 );
               }
+              return null
             })}
             <Group grow>
               <Button

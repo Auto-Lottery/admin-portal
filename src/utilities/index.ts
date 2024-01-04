@@ -48,15 +48,14 @@ export const moneyFormatter = (
   minPrecision: number,
   maxPrecision: number
 ) => {
-  if (typeof numberValue === "number" && !isNaN(numberValue)) {
+  if (typeof numberValue === "number" && !Number.isNaN(numberValue)) {
     return new Intl.NumberFormat("ja-JP", {
       minimumFractionDigits: minPrecision,
       maximumFractionDigits: maxPrecision,
     }).format(numberValue);
-  } else {
-    return new Intl.NumberFormat("ja-JP", {
-      minimumFractionDigits: minPrecision,
-      maximumFractionDigits: maxPrecision,
-    }).format(0);
   }
+  return new Intl.NumberFormat("ja-JP", {
+    minimumFractionDigits: minPrecision,
+    maximumFractionDigits: maxPrecision,
+  }).format(0);
 };
