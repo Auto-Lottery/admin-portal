@@ -16,6 +16,7 @@ const UserLotteryList = ({ userId }: { userId: string }) => {
     page: 1,
     pageSize: 10,
     total: 0,
+    filtersData: {}
   });
 
   const getUserList = useCallback(
@@ -94,9 +95,9 @@ const UserLotteryList = ({ userId }: { userId: string }) => {
       rowKeyField="_id"
       pagination={{ ...pagination, total: totalRow }}
       setPagination={setPagination}
-      // onSelectRow={(rowData: RowItemType) => {
-      //     router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
-      // }}
+    // onSelectRow={(rowData: RowItemType) => {
+    //     router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
+    // }}
     />
   );
 };

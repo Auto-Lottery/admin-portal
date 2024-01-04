@@ -20,6 +20,7 @@ const UserTransactionList = ({
     page: 1,
     pageSize: 20,
     total: 0,
+    filtersData: {}
   });
 
   const getTransactionList = useCallback(
@@ -77,9 +78,9 @@ const UserTransactionList = ({
       rowKeyField="_id"
       pagination={{ ...pagination, total: totalRow }}
       setPagination={setPagination}
-      // onSelectRow={(rowData: RowItemType) => {
-      //     router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
-      // }}
+    // onSelectRow={(rowData: RowItemType) => {
+    //     router.push(`/users/${rowData?._id}/${rowData?.phoneNumber}`);
+    // }}
     />
   );
 };
