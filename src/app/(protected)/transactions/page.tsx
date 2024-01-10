@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Group, Text } from "@mantine/core";
+import { Box, Group, Text } from "@mantine/core";
 import React, { useState } from "react";
 import Filter from "@/components/shared/filter";
 import TransactionList from "@/components/transactions/transaction-list";
@@ -13,9 +13,9 @@ function Transactions() {
       <Group align="center" justify="space-between" mb="md">
         <Text>Гүйлгээний жагсаалт</Text>
         <Group gap="sm">
-          <Button size="xs" type="button">
+          {/* <Button size="xs" type="button">
             Гараар гүйлгээ үүсгэх
-          </Button>
+          </Button> */}
           <Filter
             formInitialValue={{
               status: "",
@@ -50,7 +50,9 @@ function Transactions() {
                 selectData: [
                   { label: "Амжилттай", value: "COMPLETE" },
                   { label: "Амжилтгүй", value: "FAILED" },
+                  { label: "Шийдвэрлэгдсэн", value: "DECIDED" },
                   { label: "Хүлээгдэж байгаа", value: "PENDING" },
+
                 ],
               },
             ]}

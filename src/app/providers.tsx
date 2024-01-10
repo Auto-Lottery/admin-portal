@@ -5,6 +5,7 @@ import AuthProvider from "@/contexts/auth-context";
 import ClientRequestProvider from "@/contexts/client-request-context";
 import { Notifications } from "@mantine/notifications";
 import { AdminUserWithToken } from "@/types/user";
+import NotificationProvider from "@/contexts/notification-context";
 
 export function Providers({
   children,
@@ -16,9 +17,11 @@ export function Providers({
   return (
     <>
       <Notifications position="top-right" />
-      <ClientRequestProvider>
-        <AuthProvider loggedUserData={loggedUserData}>{children}</AuthProvider>
-      </ClientRequestProvider>
+      <NotificationProvider>
+        <ClientRequestProvider>
+          <AuthProvider loggedUserData={loggedUserData}>{children}</AuthProvider>
+        </ClientRequestProvider>
+      </NotificationProvider>
     </>
   );
 }

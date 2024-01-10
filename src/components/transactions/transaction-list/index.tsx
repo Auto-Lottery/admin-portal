@@ -10,6 +10,8 @@ import { PaginationOption } from "@/types/pagination";
 import { RowItemType, TableColumnConfig } from "@/types/table";
 import { Transaction } from "@/types/transaction";
 import { moneyFormatter } from "@/utilities";
+import { useDisclosure } from "@mantine/hooks";
+import TransactionEditModal from "../transaction-edit-modal";
 
 function TransactionList({
   filters,
@@ -26,6 +28,9 @@ function TransactionList({
     total: 0,
     filtersData: {},
   });
+
+  const [opened, { open, close }] = useDisclosure(false);
+  const [selectedRow, setSelectedRow] = useState<RowItemType>();
 
   const getTransactionList = useCallback(
     async ({ page, pageSize, filtersData }: PaginationOption) => {
@@ -72,6 +77,8 @@ function TransactionList({
         return <Badge color="green">Амжилттай</Badge>;
       case "FAILED":
         return <Badge color="red">Амжилтгүй</Badge>;
+      case "DECIDED":
+        return <Badge color="blue">Шийдвэрлэгдсэн</Badge>;
       default:
         return <Badge color="orange">Хүлээгдэж байна</Badge>;
     }
@@ -115,7 +122,10 @@ function TransactionList({
       renderCell: (rowData: RowItemType) =>
         rowData?.status === "FAILED" ? (
           <Group>
-            <ActionIcon>
+            <ActionIcon onClick={() => {
+              setSelectedRow(rowData);
+              open();
+            }}>
               <TbEdit />
             </ActionIcon>
           </Group>
@@ -124,13 +134,20 @@ function TransactionList({
   ];
 
   return (
-    <CustomTable
-      data={listData}
-      columnConfig={columnConfig}
-      rowKeyField="_id"
-      pagination={{ ...pagination, total: totalRow }}
-      setPagination={setPagination}
-    />
+    <>
+      <CustomTable
+        data={listData}
+        columnConfig={columnConfig}
+        rowKeyField="_id"
+        pagination={{ ...pagination, total: totalRow }}
+        setPagination={setPagination}
+      />
+      {selectedRow ? <TransactionEditModal opened={opened} close={() => {
+        setSelectedRow(undefined);
+        close()
+      }} transactionData={selectedRow} /> : null}
+
+    </>
   );
 }
 
